@@ -32,7 +32,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[\ApiPlatform\Metadata\Post]
-#[Put]
+#[Put(
+    denormalizationContext: [
+        'groups' => ['put:post']
+    ]
+)]
 #[GetCollection]
 #[Delete]
 #[Patch]
@@ -45,7 +49,7 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read:collection'])]
+    #[Groups(['read:collection', 'put:post'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -64,7 +68,7 @@ class Post
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[Groups(['read:item'])]
+    #[Groups(['read:item', 'put:post'])]
     private ?Category $category = null;
 
     public function getId(): ?int
